@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Jouer un scénario</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+  <div id="container">
+    <h1>Jouer un scénario</h1>
+    <div id="scenario-selection">
+      <label for="scenario">Sélectionnez un scénario :</label>
+      <select id="scenario">
+        <option value="scenario1">Scénario 1</option>
+        <option value="scenario2">Scénario 2</option>
+        <option value="scenario3">Scénario 3</option>
+      </select>
+      <button id="start-button">Commencer</button>
+    </div>
+    <div id="game-container" style="display: none;">
+      <div id="story"></div>
+      <div id="image-container"></div>
+      <div id="choices"></div>
+    </div>
+  </div>
+  <script>
+    const scenarioSelect = document.getElementById('scenario');
+    const startButton = document.getElementById('start-button');
+    const gameContainer = document.getElementById('game-container');
+    const storyContainer = document.getElementById('story');
+    const imageContainer = document.getElementById('image-container');
+    const choicesContainer = document.getElementById('choices');
+
+    let currentStep = 0;
+    let scenario = {};
+
+    startButton.addEventListener('click', () => {
+      const selectedScenario = scenarioSelect.value;
+      fetch(`scenarios/${selectedScenario}.json`)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Erreur lors du chargement du scénario');
+          }
+          return response.json();
+        })
+        .then(data => {
+          scenario = data;
+          currentStep = 0;
+          gameContainer.style.display = 'block';
+          displayStep();
+        })
+        .catch(error => {
+          console.error('Erreur:', error);
+          alert('Une erreur s\'est produite lors du chargement du scénario.');
+        });
+    });
+
+    function displayStep() {
+      const step = scenario[currentStep];
+      storyContainer.innerHTML = step.content;
+      imageContainer.innerHTML = step.image ? `<img src="${step.image}" alt="Image de l'étape">` : '';
+      choicesContainer.innerHTML = '';
+
+      if (step.choices) {
+        step.choices.forEach(choice => {
+          const button = document.createElement('button');
+          button.textContent = choice.text;
+          button.addEventListener('click', () => {
+            currentStep = scenario.findIndex(s => s.id === choice.next);
+            if (currentStep !== -1) {
+              displayStep();
+            } else {
+              storyContainer.textContent = "Fin du scénario.";
+              imageContainer.innerHTML = '';
+              choicesContainer.innerHTML = '';
+            }
+          });
+          choicesContainer.appendChild(button);
+        });
+      }
+    }
+  </script>
+</body>
+</html>

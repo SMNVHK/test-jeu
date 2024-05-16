@@ -1,0 +1,47 @@
+[
+    {
+      "id": "intro",
+      "content": "Vous vous réveillez dans une pièce sombre. Que faites-vous ?",
+      "image": "images/intro.jpg",
+      "choices": [
+        {
+          "text": "Chercher une sortie",
+          "next": "find_exit"
+        },
+        {
+          "text": "Attendre de l'aide",
+          "next": "wait_for_help"
+        }
+      ]
+    },
+    {
+      "id": "find_exit",
+      "content": "Vous trouvez une porte verrouillée. Que faites-vous ?",
+      "image": "images/locked_door.jpg",
+      "choices": [
+        {
+          "text": "Forcer la porte",
+          "next": "force_door"
+        },
+        {
+          "text": "Chercher une clé",
+          "next": "search_key"
+        }
+      ]
+    },
+    {
+      "id": "wait_for_help",
+      "content": "Vous attendez pendant des heures, mais personne ne vient. Vous avez échoué.",
+      "image": "images/failed_ending.jpg"
+    },
+    {
+      "id": "force_door",
+      "content": "Vous réussissez à forcer la porte et vous vous échappez. Bravo !",
+      "image": "images/success_ending.jpg"
+    },
+    {
+      "id": "search_key",
+      "content": "Vous trouvez une clé cachée sous un tapis. Vous déverrouillez la porte et vous vous échappez. Bravo !",
+      "image": "images/success_ending.jpg"
+    }
+  ]
